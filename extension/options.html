@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>沉浸式翻译&学习 设置</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand"><span>CT</span><div><b>沉浸式翻译&学习</b><small>翻译 · 真实语境学习</small></div></div>
+      <nav>
+        <button class="active" data-panel="api">AI 接口</button>
+        <button data-panel="reading">阅读与学习</button>
+        <button data-panel="vocab">场景词库</button>
+      </nav>
+      <div class="asideNote">API Key 只保存在你的浏览器本地存储中。</div>
+    </aside>
+
+    <main>
+      <section id="panel-api" class="panel active">
+        <div class="panelHead"><div><p>TRANSLATION ROUTER</p><h1>翻译服务池</h1><span>拖拽决定优先级；前面的服务失败、限流或超时会自动切换到下一家。NMT 负责便宜快速的正文翻译，大模型负责词典、词根、例句等学习能力。</span></div><button id="saveApi" class="primary">保存全部</button></div>
+        <div class="routerGrid">
+          <div class="card poolCard">
+            <div class="poolHead"><div><b>调用优先级</b><small>从上到下调用。可关闭但保留配置。</small></div><button id="addService" class="ghost smallBtn">＋ 添加</button></div>
+            <div id="servicePool" class="servicePool"></div>
+            <div class="poolFoot">拖动左侧 ⠿ 调整顺序。正文翻译支持 NMT + LLM；查词/学习会自动跳过 NMT，使用顺序最高的大模型。</div>
+          </div>
+          <div class="card editorCard">
+            <div class="editorHead"><div><b id="editorTitle">服务配置</b><small id="editorSub">选择左侧服务后编辑</small></div><div class="headActions"><button id="testService" class="ghost smallBtn">测试连接</button><button id="deleteService" class="danger smallBtn">删除</button></div></div>
+            <div id="serviceEditor" class="serviceEditor"></div>
+            <div id="testResult" class="hint">建议至少保留一个大模型接口，英语学习功能需要它。</div>
+          </div>
+        </div>
+        <div class="card formCard globalApiCard">
+          <div class="grid2"><label>选词 / 右键默认译入语言<select id="targetLanguage"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en">English</option><option value="ja">日本語</option><option value="ko">한국어</option></select></label><label>每批最大字符<input id="maxBatchChars" type="number" min="800" max="12000" step="200" /></label></div>
+        </div>
+      </section>
+
+      <section id="panel-reading" class="panel">
+        <div class="panelHead"><div><p>READING & LEARNING</p><h1>阅读与学习</h1><span>翻译尽量紧跟原文；普通网页可直接悬停拾词，双击单词再展开完整学习卡。</span></div><button id="saveReading" class="primary">保存设置</button></div>
+        <div class="card formCard">
+          <label class="switchRow"><span><b>英文网页默认自动翻译</b><small>英文占主导的网站打开后直接翻译；刷新后无需再次点击开始。</small></span><input id="autoTranslateEnglish" type="checkbox" /></label>
+          <label class="switchRow"><span><b>所有语言网页都自动翻译</b><small>可选。开启后日文、阿拉伯文等页面也会自动开始翻译。</small></span><input id="autoTranslate" type="checkbox" /></label>
+          <label class="switchRow"><span><b>仅翻译视口附近</b><small>优先当前屏幕，滚动到附近再翻译，首屏更快也更省 API。</small></span><input id="translateVisibleOnly" type="checkbox" /></label>
+          <label class="switchRow"><span><b>本地翻译缓存</b><small>同样内容再次出现时尽量不重复调用 API。</small></span><input id="cacheEnabled" type="checkbox" /></label>
+          <label class="switchRow"><span><b>网页悬浮控制器</b><small>在网页右侧显示小“译”按钮；后续更新覆盖文件后可直接点“重载扩展”。</small></span><input id="floatingToolbar" type="checkbox" /></label>
+          <label class="switchRow"><span><b>导航 / 侧栏也翻译</b><small>除正文外，同时翻译 Home、Explore、Today’s News 等网页 UI 文案。</small></span><input id="translateUi" type="checkbox" /></label>
+          <label class="switchRow"><span><b>悬停查词</b><small>学习卡例句和普通网页英文都可悬停显示中文释义 + 音标。</small></span><input id="hoverLookup" type="checkbox" /></label>
+          <label class="switchRow"><span><b>全网页拾词</b><small>鼠标停在普通网页英文单词上自动查词；在非链接正文中单击可立即查。</small></span><input id="globalWordLookup" type="checkbox" /></label>
+          <label>悬停触发延迟（毫秒）<input id="hoverLookupDelay" type="number" min="350" max="1500" step="50" /></label>
+          <div class="layerSettings">
+            <div class="layerSettingsTitle"><b>显示语言层级</b><small>可组合显示。原文是英文时不会重复生成英文；日文/阿拉伯文等可同时显示原文、English、中文。</small></div>
+            <label class="switchRow"><span><b>显示原文</b><small>保留网页原始语言。</small></span><input id="displayOriginal" type="checkbox" /></label>
+            <label class="switchRow"><span><b>English 译文</b><small>非英文原文时额外生成英文译文。</small></span><input id="outputEnglish" type="checkbox" /></label>
+            <label class="switchRow"><span><b>中文译文</b><small>非中文原文时生成中文译文。</small></span><input id="outputChinese" type="checkbox" /></label>
+          </div>
+          <label>单词发音<select id="pronunciationLocale"><option value="en-US">美式英语</option><option value="en-GB">英式英语</option></select></label>
+        </div>
+      </section>
+
+      <section id="panel-vocab" class="panel">
+        <div class="panelHead"><div><p>CONTEXT MEMORY</p><h1>场景词库</h1><span>这里保存的是“你在哪里遇见过这个词”，不是传统孤立单词表。</span></div><div class="headActions"><button id="exportVocab" class="ghost">导出 JSON</button><button id="clearVocab" class="danger">清空</button></div></div>
+        <div class="stats" id="vocabStats"></div>
+        <div id="vocabList" class="vocabList"></div>
+      </section>
+
+      <dialog id="servicePicker" class="servicePicker">
+        <div class="pickerShell">
+          <div class="pickerHead">
+            <div>
+              <p>ADD TRANSLATION SERVICE</p>
+              <h2>添加翻译服务</h2>
+              <span>直接点选，不需要记服务代码。可搜索 DeepL、DeepSeek、Qwen 等。</span>
+            </div>
+            <button id="closeServicePicker" class="iconBtn" type="button" aria-label="关闭">×</button>
+          </div>
+          <div class="pickerSearchWrap">
+            <span class="searchIcon">⌕</span>
+            <input id="serviceSearch" type="search" placeholder="搜索服务，例如 DeepL / DeepSeek / 阿里 / Qwen" autocomplete="off" />
+          </div>
+          <div id="servicePickerBody" class="servicePickerBody"></div>
+          <div class="pickerFoot">
+            <span>添加后仍可在右侧修改名称、模型、Endpoint 和密钥。</span>
+            <button id="cancelServicePicker" class="ghost" type="button">取消</button>
+          </div>
+        </div>
+      </dialog>
+      <div id="toast" class="toast"></div>
+    </main>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "沉浸式翻译&学习",
+  "version": "0.9.2",
+  "description": "沉浸式网页翻译与真实语境英语学习：多 API/NMT 路由、自动翻译、选词/右键翻译、词组联动、场景词库与 BYOK。",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "沉浸式翻译&学习"
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

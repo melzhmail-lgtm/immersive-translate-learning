@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>沉浸式翻译&学习</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <div class="eyebrow">IMMERSIVE TRANSLATE &amp; LEARN</div>
+        <h1>阅读，不要被翻译打断。</h1>
+      </div>
+      <button id="settingsBtn" class="iconBtn" title="设置">⚙</button>
+    </header>
+
+    <section class="hero">
+      <div class="statusRow"><span id="providerDot" class="dot"></span><span id="providerText">读取接口…</span></div>
+      <button id="translateBtn" class="primary">补扫当前网页</button>
+      <div class="seg layerSeg" id="layerSeg">
+        <button data-layer="displayOriginal">原文</button>
+        <button data-layer="outputEnglish">EN</button>
+        <button data-layer="outputChinese">中文</button>
+      </div>
+    </section>
+
+    <section class="tip">
+      <b>边读边学</b>
+      <span>网页英文可直接悬停/单击拾词；双击展开完整学习卡。导航、侧栏也可一起翻译。</span>
+    </section>
+
+    <footer>
+      <button id="vocabBtn" class="textBtn">场景词库</button>
+      <span id="pageState">—</span>
+    </footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
